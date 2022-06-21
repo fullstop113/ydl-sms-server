@@ -1,0 +1,39 @@
+ydl:
+  local-ip: localhost   # docker部署时，需要指定， 表示的运行该服务的宿主机IP
+  nacos:
+    ip: localhost
+    port: 8848
+    namespace: abfe5cae-f98d-4116-b6af-129ba9ae994a
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: ydl-sms-manage #@project.artifactId@
+  profiles:
+    active: dev #@pom.profile.name@
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848 #${ydl.nacos.ip}:${ydl.nacos.port}
+        file-extension: yml
+        namespace: abfe5cae-f98d-4116-b6af-129ba9ae994a #${ydl.nacos.namespace}
+        shared-dataids: common.yml,redis.yml,mysql.yml
+        refreshable-dataids: common.yml
+        enabled: true
+      discovery:
+        server-addr: 127.0.0.1:8848 #${ydl.nacos.ip}:${ydl.nacos.port}
+        namespace: abfe5cae-f98d-4116-b6af-129ba9ae994a #${ydl.nacos.namespace}
+        metadata:
+          management.context-path: ${server.servlet.context-path:}${spring.mvc.servlet.path:}${management.endpoints.web.base-path:}
+logging:
+  file:
+    path: /data/projects/logs
+    name: ${logging.file.path}/${spring.application.name}/root.log
+
+info:
+  name: "@project.name@"
+  description: "@project.description@"
+  version: "@project.version@"
+  spring-boot-version: "@spring.boot.version@"
+  spring-cloud-version: "@spring.cloud.version@"
